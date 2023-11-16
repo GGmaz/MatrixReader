@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	matrixKat, ok := createMatrixFromInput("fsd.txt")
+	matrixKat, ok := createMatrixFromInput("mesnatostKategorija.txt")
 	if !ok {
 		return
 	}
