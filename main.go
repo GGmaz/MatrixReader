@@ -4,70 +4,32 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
 func main() {
-	matrixStr, ok := createStrMatrix()
+	matrixKat, ok := createMatrixFromInput("fsd.txt")
 	if !ok {
 		return
 	}
 
-	matrixInt, ok := createIntMatrix()
+	matrixInt, ok := createMatrixFromInput("mesnatost.txt")
 	if !ok {
 		return
 	}
 
-	x := 20
+	x := 21
 	y := 63
-	//printMatrixStr(matrixStr)
-	//printMatrixInt(matrixInt)
-	valueKategorija := getElementStr(matrixStr, x, y)
-	valueMesnatost := getElementInt(matrixInt, x, y)
 
-	fmt.Printf("Katgorija Matrix[%d][%d] = %s\n", x, y, valueKategorija)
-	fmt.Printf("Mesnatost Matrix[%d][%d] = %d\n", x, y, valueMesnatost)
+	valueKategorija := getElement(matrixKat, x, y)
+	valueMesnatost := getElement(matrixInt, x, y)
+
+	fmt.Printf("Kategorija Matrix[%d][%d] = %s\n", x, y, valueKategorija)
+	fmt.Printf("Mesnatost Matrix[%d][%d] = %s\n", x, y, valueMesnatost)
 }
 
-func createIntMatrix() ([][]int, bool) {
-	file, err := os.Open("mesnatost.txt")
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return nil, false
-	}
-	defer file.Close()
-
-	var matrixInt [][]int
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		values := strings.Fields(line)
-
-		var row []int
-		for _, v := range values {
-			num, err := strconv.Atoi(v)
-			if err != nil {
-				fmt.Println("Error converting string to int:", err)
-				return nil, false
-			}
-			row = append(row, num)
-		}
-
-		matrixInt = append(matrixInt, row)
-	}
-
-	// Check for scanning errors
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-		return nil, false
-	}
-	return matrixInt, true
-}
-
-func createStrMatrix() ([][]string, bool) {
-	file, err := os.Open("fsd.txt")
+func createMatrixFromInput(filename string) ([][]string, bool) {
+	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return nil, false
@@ -98,16 +60,7 @@ func createStrMatrix() ([][]string, bool) {
 	return matrixStr, true
 }
 
-func getElementInt(matrix [][]int, x, y int) int {
-	// Check if the provided indices are within the valid range
-	if x < 5 || x > 35 || y < 50 || y > 89 {
-		fmt.Println("Indices out of range")
-		return -1
-	}
-
-	return matrix[x-5][y-50]
-}
-func getElementStr(matrix [][]string, x, y int) string {
+func getElement(matrix [][]string, x, y int) string {
 	// Check if the provided indices are within the valid range
 	if x < 5 || x > 35 || y < 50 || y > 89 {
 		fmt.Println("Indices out of range")
@@ -121,15 +74,6 @@ func printMatrixStr(matrix [][]string) {
 	for _, row := range matrix {
 		for _, value := range row {
 			fmt.Printf("%s ", value)
-		}
-		fmt.Println()
-	}
-}
-
-func printMatrixInt(matrix [][]int) {
-	for _, row := range matrix {
-		for _, value := range row {
-			fmt.Printf("%d ", value)
 		}
 		fmt.Println()
 	}
